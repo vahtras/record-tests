@@ -1,5 +1,5 @@
 
-from . import square
+from tests import square
 
 
 def test_square():

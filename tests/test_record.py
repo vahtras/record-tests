@@ -11,7 +11,7 @@ def test_unit():
 
     expected_test = textwrap.dedent(
         """
-        from . import unit
+        from tests import unit
 
 
         def test_unit():
@@ -32,7 +32,7 @@ def test_square():
 
     expected_test = textwrap.dedent(
         """
-        from . import square
+        from tests import square
 
 
         def test_square():

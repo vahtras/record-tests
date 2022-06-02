@@ -1,5 +1,5 @@
 
-from . import unit
+from tests import unit
 
 
 def test_unit():

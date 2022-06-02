@@ -1,14 +1,16 @@
+from functools import wraps
 import textwrap
 from typing import Callable
 
 
 def record(f: Callable):
+    @wraps(f)
     def wrapper(*args, **kwargs):
         return_value = f(*args, **kwargs)
         with open(f'tests/test_{f.__name__}.py', 'w') as tf:
             tf.write(textwrap.dedent(
                 f'''
-                from . import {f.__name__}
+                from {f.__module__} import {f.__name__}
 
 
                 def test_{f.__name__}():
