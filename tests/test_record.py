@@ -1,11 +1,21 @@
 import pathlib
 import textwrap
-from record_tests import record
 
+import pytest
+
+from record_tests import record, save_tests
 from . import unit, square
 
 
-def test_unit():
+@pytest.fixture(scope='module')
+def fix():
+    pathlib.Path('tests/test_tests.py').unlink()
+    record.records.clear()
+    yield
+    save_tests()
+
+
+def test_unit(fix):
 
     record(unit)(22)
 
@@ -21,12 +31,10 @@ def test_unit():
         """
     )
 
-    assert pathlib.Path('tests/test_unit.py').exists()
-    actual_test = open('tests/test_unit.py').read()
-    assert actual_test == expected_test
+    assert expected_test in record.records['tests']
 
 
-def test_square():
+def test_square(fix):
 
     record(square)(11)
 
@@ -42,6 +50,4 @@ def test_square():
         """
     )
 
-    assert pathlib.Path('tests/test_square.py').exists()
-    actual_test = open('tests/test_square.py').read()
-    assert actual_test == expected_test
+    assert expected_test in record.records['tests']
