@@ -3,7 +3,7 @@
 Generate unit tests for an existing function automatically by running a code in production
 with the function decorated 
 
-Decorate the function
+1. Decorate the function
 ~~~
 # foo.py
 from record_tests import record
@@ -14,7 +14,7 @@ def bar():
     return 'baz'
 ~~~
 
-Run code that calls the function
+2. Run code that calls the function
 ~~~
 # demo.py
 import record_tests
@@ -30,7 +30,7 @@ $ python demo.py
 baz
 ~~~
 
-A test file is generated
+A test file has been generated
 ~~~
 # tests/test_foo.py
 from foo import bar
@@ -42,7 +42,7 @@ def test_bar_0():
     assert actual == expected
 ~~~
 
-Run the test
+3. Run the test
 ~~~
 $ pytest -v -k foo                                                                                                                                                                                   148 ↵
 ============================= test session starts ==============================
