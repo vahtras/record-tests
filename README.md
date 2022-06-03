@@ -1,7 +1,8 @@
 # Recording tests
 
 Generate unit tests for an existing function automatically by running a code in production
-with the function decorated 
+with the function decorated. Calls to that function during the execution will be saved and 
+written to a test file to be used with Pytest.
 
 1. Decorate the function
 ~~~
