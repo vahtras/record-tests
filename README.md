@@ -22,7 +22,7 @@ import record_tests
 import foo
 print(foo.bar())
 
-record_tests.save_tests('tests')
+record_tests.save_tests(testdir='tests')
 ~~~
 
 ~~~
@@ -32,6 +32,7 @@ baz
 
 A test file is generated
 ~~~
+# tests/test_foo.py
 from foo import bar
 
 
