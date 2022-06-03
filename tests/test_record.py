@@ -9,7 +9,7 @@ from . import unit, square
 
 @pytest.fixture(scope='module')
 def fix():
-    pathlib.Path('tests/test_tests.py').unlink()
+    pathlib.Path('tests/test_tests.py').unlink(missing_ok=True)
     record.records.clear()
     yield
     save_tests()
@@ -17,21 +17,29 @@ def fix():
 
 def test_unit(fix):
 
+    record(unit)(11)
     record(unit)(22)
 
-    expected_test = textwrap.dedent(
+    expected_test_11 = textwrap.dedent(
         """
-        from tests import unit
+        def test_unit_0():
+            actual = unit(*(11,), **{})
+            expected = 11
+            assert actual == expected
+        """
+    )
 
-
-        def test_unit():
+    expected_test_22 = textwrap.dedent(
+        """
+        def test_unit_1():
             actual = unit(*(22,), **{})
             expected = 22
             assert actual == expected
         """
     )
 
-    assert expected_test in record.records['tests']
+    assert expected_test_11 in record.records['tests']['unit'][0]
+    assert expected_test_22 in record.records['tests']['unit'][1]
 
 
 def test_square(fix):
@@ -40,14 +48,11 @@ def test_square(fix):
 
     expected_test = textwrap.dedent(
         """
-        from tests import square
-
-
-        def test_square():
+        def test_square_0():
             actual = square(*(11,), **{})
             expected = 121
             assert actual == expected
         """
     )
 
-    assert expected_test in record.records['tests']
+    assert expected_test in record.records['tests']['square'][0]

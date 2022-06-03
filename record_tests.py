@@ -8,27 +8,27 @@ def record(f: Callable):
     @functools.wraps(f)
     def wrapper(*args, **kwargs):
         return_value = f(*args, **kwargs)
+        i = len(record.records[f.__module__][f.__name__])
         body = textwrap.dedent(
                 f'''
-                from {f.__module__} import {f.__name__}
-
-
-                def test_{f.__name__}():
+                def test_{f.__name__}_{i}():
                     actual = {f.__name__}(*{args}, **{kwargs})
                     expected = {return_value!r}
                     assert actual == expected
                 '''
             )
-        record.records[f.__module__].append(body)
+        record.records[f.__module__][f.__name__].append(body)
         return return_value
     return wrapper
 
 
-record.records = collections.defaultdict(list)
+# A nested dict with {'module': {'testfunc': ['testcase1', 'testcase2'...]}}
+record.records = collections.defaultdict(lambda: collections.defaultdict(list))
 
 
 def save_tests(testdir='tests'):
-    for mod, cases in record.records.items():
+    for mod, funcs in record.records.items():
         with open(f'{testdir}/test_{mod}.py', 'w') as tf:
-            for case in cases:
-                tf.write(case)
+            tf.write(f'from {mod} import {", ".join(funcs)}\n')
+            for func, cases in funcs.items():
+                tf.write("\n" + "\n".join(cases))
